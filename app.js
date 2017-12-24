@@ -1,52 +1,46 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const webpush = require('web-push');
+const { scrap } = require('./scrap');
+const { notifications } = require('./notification');
+const CronJob = require('cron').CronJob;
+const { job } = require('./job');
 
-app.use(express.static('.'));
+// new CronJob('*/2 * * * * *', job, null, true);
+new CronJob('0 0 11-22 * * *', job, null, true);
+
+app.set('views', './');
+app.set('view engine', 'pug')
+
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-const vapidKeys = {
-  publicKey:
-    'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U',
-  privateKey: 'UUxI4O8-FbRouAevSmBQ6o18hgE4nSG3qwvJTfKc-ls'
-};
+app.get('/', (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY}));
 
-webpush.setVapidDetails(
-  'mailto:pouyio@gmail.com',
-  vapidKeys.publicKey,
-  vapidKeys.privateKey
-);
+app.post('/subscribe', async (req, res) => {
 
+  notifications.subscribe(req.body.subscription);
+  res.sendStatus(200);
+  
+});
 
-
-// const pushapp = require('./serviceworker-push.js')(app);
-
-app.get('/t', async (req, res) => {
-
-  const response = await webpush.sendNotification(subscription, dataToSend);
-
-  console.log(response);
+app.delete('/subscribe', async (req, res) => {
+  
+  notifications.unsubscribe(req.body.subscription);
+  res.sendStatus(200);
 
 });
 
-app.get('/*', function (r, s) {
-  s.sendStatus(201);
+app.post('/all-albums', async (req, res) => {
 
-  // pushapp.push(u.endpoint, {
-  //   title: 'Hi there!', 
-  //   body: "I'm a web push notification", 
-  //   icon: '', 
-  //   badge: '', 
-  //   actions: [
-  //     {action: 'like', title: '👍Like'},
-  //     {action: 'reply', title: 'Reply'}
-  //   ]
-  // })
-
+  notifications.notificate((await scrap())[0]);
+  res.sendStatus(200);
+  
 });
 
 
-app.listen(8080, function () {
-  console.log('Node app is running on port 8080');
-});
+app.get('/*', (r, s) => s.sendStatus(404));
+
+
+app.listen(8080, () => console.log('Node app is running on port 8080'));

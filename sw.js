@@ -1,23 +1,44 @@
 self.addEventListener('push', (event) => {
-    console.log('[Service Worker] Push Received.');
-    console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
 
+    const payload = event.data ? JSON.parse(event.data.text()) : {};
     const options = {
-        body: 'Yay it works.',
-        icon: 'images/icon.png',
-        badge: 'images/badge.png'
+        data: {
+            band: payload.band,
+            url: payload.url
+        },
+        title: payload.text,
+        body: payload.info,
+        badge: './favicon.ico',
+        icon: payload.cover,
+        image: payload.cover,
+        actions: [{
+            action: 'to-pocket',
+            title: 'Pocket',
+            icon: './pocket.png'
+        }, {
+            action: 'to-wikipedia',
+            band: payload.band,
+            title: 'Wikipedia',
+            icon: './wikipedia.png'
+        }
+        ]
     };
 
-    event.waitUntil(self.registration.showNotification('Push Codelab', options));
+    event.waitUntil(self.registration.showNotification(payload.text, options));
 });
 
 self.addEventListener('notificationclick', (event) => {
-    console.log('[Service Worker] Notification click Received.');
-  
-    event.notification.close();
-  
-    event.waitUntil(
-      clients.openWindow('https://developers.google.com/web/')
-    );
-  });
-  
+    const data = event.notification.data;
+    let url = data.url;
+
+    switch (event.action) {
+        case 'to-pocket':
+            url = data.url;
+            break;
+        case 'to-wikipedia':
+            url = `https://www.google.es/search?q=${encodeURI(data.band)}`;
+            break;
+    }
+
+    event.waitUntil(clients.openWindow(url));
+});

@@ -8,18 +8,20 @@ self.addEventListener('push', (event) => {
         },
         title: payload.text,
         body: payload.info,
-        badge: './favicon.ico',
+        badge: '/favicon.png',
         icon: payload.cover,
+        tag: 'scrapper',
+        silent: 'true',
         image: payload.cover,
         actions: [{
             action: 'to-pocket',
             title: 'Pocket',
-            icon: './pocket.png'
+            icon: '/pocket.png'
         }, {
             action: 'to-wikipedia',
             band: payload.band,
             title: 'Wikipedia',
-            icon: './wikipedia.png'
+            icon: '/wikipedia.png'
         }
         ]
     };
@@ -39,6 +41,7 @@ self.addEventListener('notificationclick', (event) => {
             url = `https://www.google.es/search?q=${encodeURI(data.band)}`;
             break;
     }
-
+    event.notification.close();
     event.waitUntil(clients.openWindow(url));
+
 });

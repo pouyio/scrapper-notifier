@@ -8,7 +8,7 @@ self.addEventListener('push', (event) => {
         },
         title: payload.text,
         body: payload.info,
-        badge: '/favicon.png',
+        badge: '/logo.png',
         icon: payload.cover,
         tag: 'scrapper',
         silent: 'true',

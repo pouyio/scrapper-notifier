@@ -14,16 +14,11 @@ self.addEventListener('push', (event) => {
         silent: 'true',
         image: payload.cover,
         actions: [{
-            action: 'to-pocket',
-            title: 'Pocket',
-            icon: '/pocket.png'
-        }, {
             action: 'to-wikipedia',
             band: payload.band,
             title: 'Wikipedia',
             icon: '/wikipedia.png'
-        }
-        ]
+        }]
     };
 
     event.waitUntil(self.registration.showNotification(payload.text, options));
@@ -34,9 +29,6 @@ self.addEventListener('notificationclick', (event) => {
     let url = data.url;
 
     switch (event.action) {
-        case 'to-pocket':
-            url = data.url;
-            break;
         case 'to-wikipedia':
             url = `https://www.google.es/search?q=${encodeURI(data.band)}`;
             break;

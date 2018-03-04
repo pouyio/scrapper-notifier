@@ -13,7 +13,8 @@ html
         li
           p
             a(href=val.url, target='_blank')= val.text
-          img(src=val.cover, width='50px')
+          a(href=val.cover, target='_blank')
+            img(src=val.cover, width='50px')
           p
             small= val.info
     

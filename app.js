@@ -45,8 +45,8 @@ app.post('/all-albums', async (req, res) => {
 app.get('/*', (r, s) => s.sendStatus(404));
 
 const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/comic/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/comic/fullchain.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/aws/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/aws/fullchain.pem')
 }
 const httpsServer = https.createServer(options || {}, app);
 httpsServer.listen(process.env.PORT, () => console.log(`Notifier app is runnin on port ${process.env.PORT}!`));

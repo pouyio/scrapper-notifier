@@ -3,6 +3,17 @@ html
   head
     title Service Worker
   body(data-key=key)
+    h1 Actions
     button#all-albums Request one album
     button#unsubscribe Unsubscribe
+    h1 Last items
+    ul
+      each val in data
+        li
+          p
+            a(href=val.url, target='_blank')= val.text
+          img(src=val.cover, width='50px')
+          p
+            small= val.info
+    
     script(src='main.js')

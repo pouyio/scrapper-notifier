@@ -4,7 +4,7 @@ const adapter = new FileSync('db.json');
 const db = low(adapter);
 const webpush = require('web-push');
 
-db.defaults({ subscriptions: [], last_entry: "" }).write();
+db.defaults({ subscriptions: [], last_entries: [] }).write();
 
 webpush.setVapidDetails(
     'mailto:pouyio@gmail.com',

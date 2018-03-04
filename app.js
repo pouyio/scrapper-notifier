@@ -9,8 +9,13 @@ const { notifications } = require('./notification');
 const CronJob = require('cron').CronJob;
 const { job } = require('./job');
 
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
 // new CronJob('*/2 * * * * *', job, null, true);
-new CronJob('0 0 11-22 * * *', job, null, true);
+new CronJob('0 0 11-22/3 * * *', job, null, true);
 
 app.set('views', './');
 app.set('view engine', 'pug')
@@ -18,7 +23,7 @@ app.set('view engine', 'pug')
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY }));
+app.get('/', async (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY, data: db.get('last_entries').value() }));
 
 app.post('/subscribe', async (req, res) => {
 
@@ -36,7 +41,8 @@ app.delete('/subscribe', async (req, res) => {
 
 app.post('/all-albums', async (req, res) => {
 
-  notifications.notificate((await scrap())[0]);
+  const albums = (await scrap()) || [];
+  albums.forEach(notifications.notificate);
   res.sendStatus(200);
 
 });

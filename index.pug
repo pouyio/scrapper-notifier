@@ -4,10 +4,12 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title Service Worker
   body(data-key=key)
-    h1 Actions
+    h3 Actions
     button#all-albums Request one album
     button#unsubscribe Unsubscribe
-    h1 Last items
+    h3
+      a(href= source) Source
+    h3 Last items
     ul
       each val in data
         li

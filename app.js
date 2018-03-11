@@ -23,7 +23,7 @@ app.set('view engine', 'pug')
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-app.get('/', async (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY, data: db.get('last_entries').value(), source: process.env.SOURCE_URL }));
+app.get('/', async (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY, data: db.get('last_entries').value().reverse(), source: process.env.SOURCE_URL }));
 
 app.post('/subscribe', async (req, res) => {
 

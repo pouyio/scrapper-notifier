@@ -10,14 +10,13 @@ self.addEventListener('push', (event) => {
         body: payload.info,
         badge: '/logo.png',
         icon: payload.cover,
-        tag: 'scrapper',
-        silent: 'true',
+        tag: Date.now(),
+        silent: true,
         image: payload.cover,
         actions: [{
-            action: 'to-wikipedia',
+            action: 'to-google',
             band: payload.band,
-            title: 'Wikipedia',
-            icon: '/wikipedia.png'
+            title: 'Google'
         }]
     };
 
@@ -29,7 +28,7 @@ self.addEventListener('notificationclick', (event) => {
     let url = data.url;
 
     switch (event.action) {
-        case 'to-wikipedia':
+        case 'to-google':
             url = `https://www.google.es/search?q=${encodeURI(data.band)}`;
             break;
     }

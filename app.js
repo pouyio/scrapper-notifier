@@ -15,7 +15,7 @@ const adapter = new FileSync('db.json');
 const db = low(adapter);
 
 // new CronJob('*/2 * * * * *', job, null, true);
-new CronJob('0 0 11-22/3 * * *', job, null, true);
+new CronJob('0 0 11-22/3 * * 1-5', job, null, true);
 
 app.set('views', './');
 app.set('view engine', 'pug')

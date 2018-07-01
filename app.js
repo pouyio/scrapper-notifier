@@ -25,14 +25,14 @@ app.use(bodyParser.json());
 
 app.get('/', async (req, res) => res.render('index', { key: process.env.VAPID_PUBLIC_KEY, data: db.get('last_entries').value().reverse(), source: process.env.SOURCE_URL }));
 
-app.post('/subscribe', async (req, res) => {
+app.post('/subscribe', (req, res) => {
 
   notifications.subscribe(req.body.subscription);
   res.sendStatus(200);
 
 });
 
-app.delete('/subscribe', async (req, res) => {
+app.delete('/subscribe', (req, res) => {
 
   notifications.unsubscribe(req.body.subscription);
   res.sendStatus(200);

@@ -16,8 +16,9 @@ html
           p
             a(href=val.url, target='_blank')= val.text
           a(href=val.cover, target='_blank')
-            img(src=val.cover, width='50px')
+            img(data-src=val.cover, width='50px')
           p
             small= val.info
     
     script(src='main.js')
+    script(src='preload.js')
